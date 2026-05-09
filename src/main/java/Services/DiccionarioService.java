@@ -82,6 +82,7 @@ public class DiccionarioService {
             }
         }
         return listaFinal;
+
     }
     public void eliminar(int id){
         tabla.eliminar(id);

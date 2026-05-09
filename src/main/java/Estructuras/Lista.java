@@ -40,3 +40,4 @@ public class Lista <T>{
         return primero;
     }
 }
+

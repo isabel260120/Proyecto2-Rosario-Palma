@@ -43,6 +43,7 @@ public class TablaHash<K, V> {
         return null;
     }
 
+
     public boolean contiene(K llave) {
         return obtener(llave) != null;
     }
