@@ -39,5 +39,17 @@ public class Lista <T>{
     public NodoLista<T> getPrimero() {
         return primero;
     }
+    @SuppressWarnings("unchecked")
+    public T[] toArray(Class<T> clase){
+        T[] arreglo=(T[]) java.lang.reflect.Array.newInstance(clase,tamaño);
+        NodoLista<T> aux=primero;
+        int i=0;
+        while(aux!=null){
+            arreglo[i]=aux.getValor();
+            aux=aux.getSiguiente();
+            i++;
+        }
+        return arreglo;
+    }
 }
 

@@ -3,7 +3,11 @@ import Estructuras.*;
 import BaseDatos.Palabra;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Comparator;
+import java.util.Scanner;
 
 @Service
 public class DiccionarioService {
@@ -15,6 +19,8 @@ public class DiccionarioService {
         Palabra nueva =new Palabra(contadorId++, texto, significado,0);
         trie.insertar(texto, nueva);
         tabla.insertar(nueva.getId(), nueva);
+
+        exportarCSV("Diccionario.csv");
         return  nueva;
     }
 //6.2 actualizacion de palabras
@@ -49,18 +55,23 @@ public class DiccionarioService {
 
     public Lista<Palabra> obtenerTopK(String criterioBusqueda,String tipo, int limite,String orden, String ordenarPor){
         Lista<Palabra>resultadosIniciales;
+
         if(tipo.equalsIgnoreCase("prefijo")){
             resultadosIniciales=trie.buscarPorPrefijo(criterioBusqueda);
-        }else{
+        }else if(tipo.equalsIgnoreCase("comodin")){
             resultadosIniciales= trie.buscarComodin(criterioBusqueda);
+            
+        }else{
+            resultadosIniciales=new Lista<>();
         }
+
         Comparator<Palabra> comparador;
         if(ordenarPor.equalsIgnoreCase("Frecuencia")){
-            comparador= ordenarPor.equalsIgnoreCase("desc") ?
+            comparador= orden.equalsIgnoreCase("desc") ?
                     (p1,p2)->Integer.compare(p2.getFrecuencia(), p1.getFrecuencia()):
                     (p1,p2)->Integer.compare(p1.getFrecuencia(), p2.getFrecuencia());
         }else{
-            comparador= ordenarPor.equalsIgnoreCase("desc") ?
+            comparador= orden.equalsIgnoreCase("desc") ?
                     (p1,p2)->p2.getTexto().compareToIgnoreCase(p1.getTexto()):
                     (p1,p2)->p1.getTexto().compareToIgnoreCase(p2.getTexto());
         }
@@ -91,7 +102,45 @@ public class DiccionarioService {
     public boolean existePalabra(String texto){
         return trie.buscar(texto) != null;
     }
-}
 
+    public void exportarCSV(String ruta){
+        try(PrintWriter writer=new PrintWriter(new File(ruta))){
+            writer.println("id;palabra;significado;frecuencia");
+            Lista<Palabra> todas= trie.obtenerTodas();
+            Lista.NodoLista<Palabra> actual=todas.getPrimero();
+
+            while(actual!=null){
+                Palabra p=actual.getValor();
+                writer.println(p.getId()+";"+ p.getTexto() +";"+p.getSignificado()+";"+p.getFrecuencia()+";");
+                actual=actual.getSiguiente();
+            }
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void importarCSV(String ruta){
+        try(Scanner scanner=new Scanner(new File(ruta))){
+            if(scanner.hasNextLine()) scanner.nextLine();
+            while (scanner.hasNextLine()) {
+                String[]datos=scanner.nextLine().split(";");
+                if(datos.length==4){
+                    int id=Integer.parseInt(datos[0]);
+                    String texto=datos[1];
+                    String significado=datos[2];
+                    int frecuencia=Integer.parseInt(datos[3]);
+
+                    Palabra p =new Palabra(id,texto,significado,frecuencia);
+                    trie.insertar(texto,p);
+                    tabla.insertar(id,p);
+
+                    if(id>=contadorId) contadorId=id+1;
+                }
+            }
+        }catch (FileNotFoundException e){
+            System.out.println("Archivo no encontrado");
+        }
+    }
+}
 
 

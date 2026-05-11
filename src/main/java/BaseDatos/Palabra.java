@@ -1,11 +1,12 @@
 package BaseDatos;
 
-public class Palabra {
-    int id;
-    String texto;
-    String significado;
-    int frecuencia;
-    public Palabra(int id, String texto, String significado, int frecuencia) {
+public class Palabra implements Comparable<Palabra> {
+    private Integer id;
+    private String texto;
+    private String significado;
+    private Integer frecuencia;
+    public Palabra(){}
+    public Palabra(Integer id, String texto, String significado, Integer frecuencia) {
         this.id = id;
         this.texto = texto;
         this.significado = significado;
@@ -19,10 +20,10 @@ public class Palabra {
     }
 
     //getters y setters de los atributos del metodo Palabra
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -43,10 +44,10 @@ public class Palabra {
     }
 
 
-    public int getFrecuencia() {
+    public Integer getFrecuencia() {
         return frecuencia;
     }
-    public void setFrecuencia(int frecuencia) {
+    public void setFrecuencia(Integer frecuencia) {
         this.frecuencia = frecuencia;
     }
 

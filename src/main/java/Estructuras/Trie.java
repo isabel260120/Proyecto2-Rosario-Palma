@@ -43,6 +43,9 @@ public class Trie<T> {
     }
     public Lista<T> buscarComodin(String patron){
         Lista<T> resultados= new Lista<>();
+        if(patron==null){
+            return resultados;
+        }
         buscarComodinRecursivo(raiz,patron,0,resultados);
         return resultados;
     }
@@ -57,15 +60,46 @@ public class Trie<T> {
             return;
         }
         char c = patron.charAt(indice);
-        if(c=='?'|| c=='*'){
-            for(int i=0;i<256;i++){
-                if(nodo.getHijos()[i] !=null){
-                    buscarComodinRecursivo(nodo.getHijos()[i],patron,indice+1,resultados);
+        if (c == '?') {
+            // ? representa exactamente un carácter
+            for (int i = 0; i < 256; i++) {
+                if (nodo.getHijos()[i] != null) {
+                    buscarComodinRecursivo(
+                            nodo.getHijos()[i],
+                            patron,
+                            indice + 1,
+                            resultados
+                    );
                 }
             }
-        }else{
-            if(c<256&&nodo.getHijos()[c]!=null){
-                buscarComodinRecursivo(nodo.getHijos()[c],patron,indice+1,resultados);
+        }else if (c == '*') {
+            // Caso 1: * representa cero caracteres
+            buscarComodinRecursivo(
+                    nodo,
+                    patron,
+                    indice + 1,
+                    resultados
+            );
+
+            // Caso 2: * representa uno o más caracteres
+            for (int i = 0; i < 256; i++) {
+                if (nodo.getHijos()[i] != null) {
+                    buscarComodinRecursivo(
+                            nodo.getHijos()[i],
+                            patron,
+                            indice,
+                            resultados
+                    );
+                }
+            }
+        }else {
+            if (c < 256 && nodo.getHijos()[c] != null) {
+                buscarComodinRecursivo(
+                        nodo.getHijos()[c],
+                        patron,
+                        indice + 1,
+                        resultados
+                );
             }
         }
     }
