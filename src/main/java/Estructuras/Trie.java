@@ -15,13 +15,13 @@ public class Trie<T> {
     public void insertar(String palabra, T objeto){
         NodeTrie<T> actual= raiz; //objeto
         for(int i=0;i<palabra.length();i++){ //recorrido palabra
-            char c = palabra.charAt(i); //Para cada letra, obtenemos su valor numérico (índice en el arreglo de 256).
+            char c = palabra.charAt(i); //Para cada letra, se obtiene su valor numérico (índice en el arreglo de 256).
             if(actual.getHijos()[c] ==null){ //Revisa si el nodo actual ya tiene un hijo para esa letra
                 actual.getHijos()[c]= new NodeTrie<>(); //si no existe se crea un nuevo nodo
             }
             actual=actual.getHijos()[c];
         }
-        // Al salir del ciclo for, se encuentra en el nodo de la ULTIMA letra.
+        // Al salir del ciclo for, se encuentra en el nodo de la ultima letra.
         // Marca que aqui termina una palabra valida.
         actual.setEsFinDePalabra(true);
         actual.setDato(objeto);
@@ -41,11 +41,15 @@ public class Trie<T> {
         // Retorna el dato solo si es el final de una palabra registrada
         return actual.esFinDePalabra()?actual.getDato():null;
     }
+    // Busca palabras usando un patrón con comodines.
+    // '?' representa exactamente un carácter.
+    // '*' representa cero, uno o varios caracteres.
     public Lista<T> buscarComodin(String patron){
         Lista<T> resultados= new Lista<>();
         if(patron==null){
             return resultados;
         }
+        // Inicia la búsqueda recursiva desde la raíz.
         buscarComodinRecursivo(raiz,patron,0,resultados);
         return resultados;
     }
@@ -121,6 +125,8 @@ public class Trie<T> {
         this.recorrerAuxiliar(raiz,listaParaLlenar);
         return listaParaLlenar;
     }
+    // Recorre recursivamente el Trie y agrega a la lista todos los datos
+    // que estén en nodos marcados como final de palabra.
     private void recorrerAuxiliar(NodeTrie<T> nodo, Lista<T> lista) {
         if (nodo == null) {
             return;

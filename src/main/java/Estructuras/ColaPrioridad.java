@@ -3,8 +3,10 @@ package Estructuras;
 import java.util.Comparator;
 
 public class ColaPrioridad<T> {
+    // Arreglo que almacena los elementos del heap.
     private T[] heap;
     private int tamaño;
+    // Cantidad máxima de elementos que puede almacenar el heap.
     private int capacidad;
     private Comparator<T> comparador;
 
@@ -13,6 +15,7 @@ public class ColaPrioridad<T> {
         this.capacidad = capacidad;
         this.tamaño=0;
         this. comparador = comparador;
+        // Se crea el arreglo con una posición extra porque el heap inicia en índice 1.
         this.heap = (T[]) new Object[capacidad +1];
     }
     public void insertar(T elemento) {
@@ -23,6 +26,7 @@ public class ColaPrioridad<T> {
         heap[tamaño] = elemento;
         subir(tamaño);
     }
+    // Elimina y retorna el elemento con mayor prioridad.
     public T eliminarMin(){
         if(tamaño==0){
             return null;
@@ -34,12 +38,14 @@ public class ColaPrioridad<T> {
         bajar(1);
         return min;
     }
+    // Reacomoda un elemento hacia arriba mientras tenga mayor prioridad que su padre.
     private void subir(int k){
         while(k>1&& comparador.compare(heap[k],heap[k/2]) < 0){
             intercambiar(k,k/2);
             k=k/2;
         }
     }
+    // Reacomoda un elemento hacia abajo mientras alguno de sus hijos tenga mayor prioridad.
     private void bajar(int k){
         while(2*k<= tamaño){
             int j=2*k;
@@ -53,6 +59,7 @@ public class ColaPrioridad<T> {
             k=j;
         }
     }
+    // Intercambia dos posiciones dentro del arreglo del heap.
     private void intercambiar(int i, int j){
         T temp=heap[i];
         heap[i]=heap[j];

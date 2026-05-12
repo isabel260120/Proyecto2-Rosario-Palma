@@ -1,5 +1,5 @@
-package BaseDatos;
-
+package Atributos;
+//atributos que va a tener la palabra del diccionario
 public class Palabra implements Comparable<Palabra> {
     private Integer id;
     private String texto;

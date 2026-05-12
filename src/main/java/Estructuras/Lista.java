@@ -1,6 +1,8 @@
 package Estructuras;
-
+//permite guardar varios elementos uno detrás de otro usando nodos.
 public class Lista <T>{
+    // Referencia al primer nodo de la lista.
+    // Desde este nodo se puede recorrer toda la estructura.
     public NodoLista<T> primero;
     private int tamaño;
 

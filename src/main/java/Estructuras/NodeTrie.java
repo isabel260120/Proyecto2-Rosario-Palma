@@ -2,6 +2,8 @@ package Estructuras;
 
 public class NodeTrie<T> {
     private NodeTrie<T>[] hijos;
+    // Indica si este nodo representa el final de una palabra almacenada.
+    // Si es true, significa que desde la raíz hasta este nodo existe una palabra completa.
     private boolean esFinDePalabra;
     private T dato; //guarda el objeto Palabra
 

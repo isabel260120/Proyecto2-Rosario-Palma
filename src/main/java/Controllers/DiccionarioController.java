@@ -3,12 +3,11 @@ package Controllers;
 import jakarta.annotation.PostConstruct;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import BaseDatos.Palabra;
+import Atributos.Palabra;
 import Services.DiccionarioService;
 import Estructuras.Lista;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -22,7 +21,7 @@ public class DiccionarioController {
     public DiccionarioController(DiccionarioService service) {
         this.service = service;
     }
-    //POST*
+    //POST* http://localhost:8080/palabra/Agregarpalabra
     @PostMapping("/Agregarpalabra")
     public ResponseEntity<Palabra> agregarPalabra(@RequestBody Palabra palabra){
         Palabra nueva=service.agregarPalabra(palabra.getTexto(), palabra.getSignificado());
@@ -39,7 +38,7 @@ public class DiccionarioController {
         return ResponseEntity.ok("Diccionario guardado en CSV");
     }
 
-    //PUT
+    //PUT actualiza significado y frecuencia http://localhost:8080/palabra/palabra
     @PutMapping("/palabra")
     public ResponseEntity<Palabra> actualizarPalabra(@RequestBody Palabra palabra){
         Palabra actualizada=service.actualizarPalabra(palabra.getId(), palabra.getTexto(), palabra.getSignificado(), palabra.getFrecuencia());
@@ -57,13 +56,13 @@ public class DiccionarioController {
         }
         return ResponseEntity.ok(todas.toArray(Palabra.class));
     }
-    //GET POR ID*
+    //GET POR ID* http://localhost:8080/palabra/id/""
     @GetMapping("/id/{id}")
     public ResponseEntity<Palabra> obtenerPorId(@PathVariable int id){
         Palabra p=service.buscarPorId(id);
         return p!=null?ResponseEntity.ok(p):ResponseEntity.notFound().build();
     }
-    //GET POR TEXTO (BUSQUEDA EXTACTA)*
+    //GET POR TEXTO (BUSQUEDA EXTACTA)* http://localhost:8080/palabra/""
     @GetMapping("/{texto}")
     public ResponseEntity<Palabra> obtenerPorTexto(@PathVariable String texto){
         Palabra p=service.buscarPorTexto(texto);
@@ -72,14 +71,14 @@ public class DiccionarioController {
         }
         return ResponseEntity.ok(p);
     }
-    //Busqueda por prefijos *
+    //Busqueda por prefijos * http://localhost:8080/palabra/prefijo/gua?limite=4&orden=desc&ordenarPor=frecuencia
     @GetMapping("/prefijo/{texto}")
     public ResponseEntity<Palabra[]> buscarPorPrefijo(@PathVariable String texto,@RequestParam(defaultValue = "10")int limite, @RequestParam(defaultValue = "asc")String orden, @RequestParam(defaultValue = "alfabeto")String ordenarPor){
         Lista<Palabra> resultados=service.obtenerTopK(texto,"Prefijo", limite, orden, ordenarPor);
         return ResponseEntity.ok(resultados.toArray(Palabra.class));
     }
 
-    //Busqueda por comodin*
+    //Busqueda por comodin* http://localhost:8080/palabra/comodin/gua*?limite=4&ordenarPor=alfabeto&orden=asc
     @GetMapping("/comodin/{patron}")
     public ResponseEntity<Palabra[]> buscarPorComodin(@PathVariable String patron,@RequestParam(defaultValue = "10")int limite, @RequestParam(defaultValue = "asc")String orden, @RequestParam(defaultValue = "frecuencia")String ordenarPor){
         Lista<Palabra> resultados=service.obtenerTopK(patron,"comodin",limite,orden,ordenarPor);

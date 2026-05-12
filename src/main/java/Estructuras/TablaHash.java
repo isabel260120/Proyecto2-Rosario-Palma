@@ -1,5 +1,6 @@
 package Estructuras;
-
+// Permite almacenar pares llave-valor, donde K representa la llave y V el valor.
+// En este proyecto se aplico para buscar palabras por ID o por texto.
 public class TablaHash<K, V> {
     private int capacidad;
     private int tamaño;
@@ -17,9 +18,12 @@ public class TablaHash<K, V> {
     private  int hash(K llave) {
         return Math.abs(llave.hashCode() % capacidad);
     }
-
+    // Inserta un par llave-valor dentro de la tabla hash.
+    // Si la llave ya existe, actualiza su valor.
     public void insertar(K llave, V valor) {
         int i=hash(llave);
+        //se avanza una posición a la vez hasta encontrar espacio
+        // o hasta encontrar la misma llave.
         while (llaves[i]!=null){
             if(llaves[i].equals(llave)){
                 valores[i]=valor;
@@ -27,10 +31,13 @@ public class TablaHash<K, V> {
             }
             i=(i+1)%capacidad;
         }
+        // Cuando se encuentra una posición vacía, se guarda la llave y su valor.
         llaves[i]=llave;
         valores[i]=valor;
         tamaño++;
     }
+    // Busca el valor asociado a una llave.
+    // Si la llave existe, retorna su valor; si no existe, retorna null.
 
     public V obtener(K llave) {
         int i=hash(llave);

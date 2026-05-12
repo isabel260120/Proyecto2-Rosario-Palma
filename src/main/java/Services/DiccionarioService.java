@@ -1,6 +1,6 @@
 package Services;
 import Estructuras.*;
-import BaseDatos.Palabra;
+import Atributos.Palabra;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -8,13 +8,16 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Comparator;
 import java.util.Scanner;
-
 @Service
 public class DiccionarioService {
+    // Estructura principal para almacenar y buscar palabras por texto,
+    // prefijo y comodines.
     private Trie<Palabra> trie=new Trie<>();
     private TablaHash<Integer, Palabra>tabla=new TablaHash<>(100);
     private int contadorId=1;
 //6.1 almacenamiento de palabras
+// Crea una nueva palabra, le asigna un ID automático,
+// la guarda en el Trie y también en la tabla hash.
     public Palabra agregarPalabra(String texto, String significado){
         Palabra nueva =new Palabra(contadorId++, texto, significado,0);
         trie.insertar(texto, nueva);
@@ -24,6 +27,7 @@ public class DiccionarioService {
         return  nueva;
     }
 //6.2 actualizacion de palabras
+// Busca una palabra por ID y actualiza sus datos como significado y frecuencia.
     public Palabra actualizarPalabra(int id, String nuevoTexto, String nuevoSignificado, int nuevaFrecuencia){
         Palabra p =tabla.obtener(id);
         if(p!=null){
@@ -34,6 +38,7 @@ public class DiccionarioService {
         return null;
     }
 //6.3 Busqueda por ID
+// Busca una palabra usando la tabla hash.
     public Palabra buscarPorId(int id){
         Palabra p=tabla.obtener(id);
         if(p!=null){
@@ -42,6 +47,7 @@ public class DiccionarioService {
         return p;
     }
     // 6.4 Búsqueda Exacta
+    // Busca una palabra dentro del Trie.
     public Palabra buscarPorTexto(String texto) {
         Palabra p = trie.buscar(texto);
         if (p != null) p.setFrecuencia(p.getFrecuencia() + 1);
@@ -49,10 +55,13 @@ public class DiccionarioService {
     }
 
     // 6.6 Búsqueda por comodín (Adaptado para retornar lista)
+    // Retorna todas las palabras que coinciden con el patrón recibido.
     public Lista<Palabra> buscarComodin(String patron) {
         return trie.buscarComodin(patron);
     }
-
+    // Obtiene los primeros K resultados según un criterio de búsqueda.
+    // Puede buscar por prefijo o por comodín, y luego ordenar los resultados
+    // por frecuencia o alfabéticamente.
     public Lista<Palabra> obtenerTopK(String criterioBusqueda,String tipo, int limite,String orden, String ordenarPor){
         Lista<Palabra>resultadosIniciales;
 
@@ -60,7 +69,7 @@ public class DiccionarioService {
             resultadosIniciales=trie.buscarPorPrefijo(criterioBusqueda);
         }else if(tipo.equalsIgnoreCase("comodin")){
             resultadosIniciales= trie.buscarComodin(criterioBusqueda);
-            
+
         }else{
             resultadosIniciales=new Lista<>();
         }
