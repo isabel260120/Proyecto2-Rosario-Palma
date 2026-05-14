@@ -140,6 +140,36 @@ public class Trie<T> {
             }
         }
     }
+    public void eliminar(String palabra){
+        eliminar(raiz,palabra,0);
+    }
+    private boolean eliminar(NodeTrie actual, String palabra, int indice){
+        if (indice == palabra.length()) {
+            if (actual.esFinDePalabra()) {
+                actual.setEsFinDePalabra(false);
+                actual.setDato(null);
+            }
+            return !actual.tieneHijos();
+
+        }
+        char ch = palabra.charAt(indice);
+        int posicion =(int)ch;
+        if (posicion < 0 || posicion >= 256 || actual.getHijos()[posicion] == null) {
+            return false; // La palabra no existe
+        }
+        NodeTrie<T> nodoHijo = actual.getHijos()[posicion];
+        boolean deberiaBorrarHijo = eliminar(nodoHijo, palabra, indice + 1);
+
+        if (deberiaBorrarHijo) {
+            actual.getHijos()[posicion] = null; // Se borra la referencia al hijo
+
+            // Si el nodo actual no es fin de otra palabra y ya no tiene más hijos,
+            // le decimos al de arriba que también se puede borrar
+            return !actual.esFinDePalabra() && !actual.tieneHijos();
+        }
+        return false;
+
+    }
 }
 
 

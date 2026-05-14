@@ -105,7 +105,15 @@ public class DiccionarioService {
 
     }
     public void eliminar(int id){
-        tabla.eliminar(id);
+        Palabra p=tabla.buscarPorId(id);
+        if(p!=null){
+            String textoABorrar=p.getTexto();
+            tabla.eliminar(id);
+            trie.eliminar(textoABorrar);
+            exportarCSV("Diccionario.csv");
+        } else{
+            System.out.println("No existe el elemento con el mismo valor");
+        }
     }
 
     public boolean existePalabra(String texto){

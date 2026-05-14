@@ -35,6 +35,15 @@ public class NodeTrie<T> {
         this.dato = dato;
     }
 
+    public boolean tieneHijos(){
+        for(NodeTrie<T> hijo: hijos){
+            if(hijo != null){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 

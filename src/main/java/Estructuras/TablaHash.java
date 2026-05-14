@@ -1,4 +1,7 @@
 package Estructuras;
+
+import Atributos.Palabra;
+
 // Permite almacenar pares llave-valor, donde K representa la llave y V el valor.
 // En este proyecto se aplico para buscar palabras por ID o por texto.
 public class TablaHash<K, V> {
@@ -75,5 +78,22 @@ public class TablaHash<K, V> {
         }
         tamaño--;
     }
+    public V buscarPorId(int id) {
+        for (int i = 0; i < capacidad; i++) {
+            if (valores[i] != null) {
+                try {
+                    java.lang.reflect.Method getId = valores[i].getClass().getMethod("getId");
+                    int valorId = (int) getId.invoke(valores[i]);
+                    if (valorId == id) {
+                        return valores[i];
+                    }
+                } catch (Exception e) {
+                    // Manejo de error si no es clase Palabra
+                }
+            }
+        }
+        return null;
+    }
+
 }
 
