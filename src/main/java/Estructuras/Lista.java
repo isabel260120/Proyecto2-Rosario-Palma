@@ -22,6 +22,7 @@ public class Lista <T>{
         }
     }
 
+
     public void agregar(T valor){
         NodoLista<T> nuevo = new NodoLista<>(valor);
         if(primero == null){

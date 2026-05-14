@@ -10,6 +10,7 @@ public class ColaPrioridad<T> {
     private int capacidad;
     private Comparator<T> comparador;
 
+
     @SuppressWarnings("unchecked")
     public ColaPrioridad(int capacidad, Comparator<T> comparador) {
         this.capacidad = capacidad;

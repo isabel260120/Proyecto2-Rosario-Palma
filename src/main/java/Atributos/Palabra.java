@@ -19,6 +19,8 @@ public class Palabra implements Comparable<Palabra> {
         return this.texto.compareToIgnoreCase(otra.getTexto());
     }
 
+
+
     //getters y setters de los atributos del metodo Palabra
     public Integer getId() {
         return id;
