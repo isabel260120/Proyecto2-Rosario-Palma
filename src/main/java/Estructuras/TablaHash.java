@@ -31,7 +31,7 @@ public class TablaHash<K, V> {
             if(llaves[i].equals(llave)){
                 valores[i]=valor;
                 return;
-            }
+            } //manejo de colisiones
             i=(i+1)%capacidad;
         }
         // Cuando se encuentra una posición vacía, se guarda la llave y su valor.
@@ -44,7 +44,7 @@ public class TablaHash<K, V> {
 
     public V obtener(K llave) {
         int i=hash(llave);
-        while (llaves[i]!=null){
+        while (llaves[i]!=null){ //manejo de colisiones
             if(llaves[i].equals(llave)){
                 return valores[i];
             }
@@ -74,7 +74,8 @@ public class TablaHash<K, V> {
             valores[i]=null;
             tamaño--;
             insertar(llaveParaReinsertar,valorParaReinsertar);
-            i=(i+1)%capacidad;
+            i=(i+1)%capacidad; //sondeo lineal: forma de resolver colisiones en una tabla hash. Si la posición calculada por la función hash está ocupada, se revisa la siguiente posición,
+            // luego la siguiente, y así hasta encontrar un espacio disponible.
         }
         tamaño--;
     }
